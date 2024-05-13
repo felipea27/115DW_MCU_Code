@@ -1,21 +1,70 @@
-const cap_delay = 1; //1uS
-const t_ref_final = 220; //220 uS
-int t_ref = 0;
-int t_in = 0;
+#include <avr/io.h>
+#include <util/delay.h>
+
+//Assign pin numbers variables
+const int start_btn = 12;
+const int degree_btn = 13;
+const int reset = 29; 
+const int adc_ext_int = 32;
+
+const int rstADC = 23;
+const int v_toggle = 24;
+
+const int cap_delay = 1; //1uS
+const int t_ref_final = 220; //220 uS
+int t_ref = 0;  //Vref timer
+int t_in = 0;   //Vin timer
 bool take_measurement = 0;
 bool comp_out = 1;
 int i = 0;
 int measurements [100];
+bool start_btn_flag = HIGH;
+
 
 
 void setup() {
   // put your setup code here, to run once:
+  //Declare pins as inputs
+  pinMode(start_btn, INPUT);
+  pinMode(adc_ext_int, INPUT);
 
+  //Declare pins as outputs
+  pinMode(rstADC, OUTPUT);
+  pinMode(v_toggle, OUTPUT);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  start_btn_flag = digitalRead(start_btn);
+  if(start_btn_flag == LOW)
+  {
+    for(; i < 100; i++)
+    {  
+      //Discharge capacitor
+      digitalWrite(rstADC, 1);
+      delayMicroseconds(cap_delay); 
+      digitalWrite(rstADC, 0);
+      //Start t_ref counter
+      while(t_ref < 220)
+      {
+        t_ref++;
+        delayMicroseconds(1);
+      }
+      t_ref = 0;
 
+      //Select Vin to be input to integrator:
+      digitalWrite(v_toggle, HIGH);
+
+      //count t_in
+      while(adc_ext_int != 0)
+      {
+        t_in++;
+        delayMicroseconds(1);
+      }
+      measurements[i] = t_in;
+      t_in = 0;
+    }
+  }
 }
 
 
