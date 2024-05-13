@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
+#include <ADC.h>
 
 //Assign pin numbers variables
 const int start_btn = 12;
