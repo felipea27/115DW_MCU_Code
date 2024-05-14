@@ -1,6 +1,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
-#include <ADC.h>
+#include "adc.h"
+#include "adc.c"
 
 //Assign pin numbers variables
 const int start_btn = 12;
@@ -39,33 +40,9 @@ void loop() {
   start_btn_flag = digitalRead(start_btn);
   if(start_btn_flag == LOW)
   {
-    for(; i < 100; i++)
-    {  
-      //Discharge capacitor
-      digitalWrite(rstADC, 1);
-      delayMicroseconds(cap_delay); 
-      digitalWrite(rstADC, 0);
-      //Start t_ref counter
-      while(t_ref < 220)
-      {
-        t_ref++;
-        delayMicroseconds(1);
-      }
-      t_ref = 0;
-
-      //Select Vin to be input to integrator:
-      digitalWrite(v_toggle, HIGH);
-
-      //count t_in
-      while(adc_ext_int != 0)
-      {
-        t_in++;
-        delayMicroseconds(1);
-      }
-      measurements[i] = t_in;
-      t_in = 0;
-    }
+    takeMeasurement(measurements, sizeof(measurements), cap_delay, rstADC, t_ref, t_in, v_toggle, adc_ext_int);
   }
+  
 }
 
 
