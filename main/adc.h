@@ -4,9 +4,11 @@
 #include <Arduino.h>
 
 
+
 #ifndef adc.h
 #define adc.h
 
-void takeMeasurement(int measurement_array[], int samples, int cap_delay, int rstADC, int t_ref, int t_in, int v_toggle, int adc_ext_int);
 
-#endif 
+void takeMeasurement(int measurement_array[], int samples, int cap_delay, int rstADC, int t_ref, int t_ref_final, int t_in, int v_toggle, int adc_ext_int_pin);
+
+#endif //ADC_H_INCLUDED

@@ -2,15 +2,9 @@
 #include <util/delay.h>
 #include "adc.h"
 #include "adc.c"
+#include "globalDefs.h"
 
-//Assign pin numbers variables
-const int start_btn = 12;
-const int degree_btn = 13;
-const int reset = 29; 
-const int adc_ext_int = 32;
 
-const int rstADC = 23;
-const int v_toggle = 24;
 
 const int cap_delay = 1; //1uS
 const int t_ref_final = 220; //220 uS
@@ -21,26 +15,26 @@ bool comp_out = 1;
 int i = 0;
 int measurements [100];
 bool start_btn_flag = HIGH;
-
+//bool adc_int_flag = 1;
 
 
 void setup() {
   // put your setup code here, to run once:
   //Declare pins as inputs
-  pinMode(start_btn, INPUT);
-  pinMode(adc_ext_int, INPUT);
+  pinMode(START_BTN_PIN, INPUT);
+  pinMode(ADC_EXT_INT, INPUT);
 
   //Declare pins as outputs
-  pinMode(rstADC, OUTPUT);
-  pinMode(v_toggle, OUTPUT);
+  pinMode(RST_ADC, OUTPUT);
+  pinMode(V_TOGGLE, OUTPUT);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  start_btn_flag = digitalRead(start_btn);
+  start_btn_flag = digitalRead(START_BTN_PIN);
   if(start_btn_flag == LOW)
   {
-    takeMeasurement(measurements, sizeof(measurements), cap_delay, rstADC, t_ref, t_in, v_toggle, adc_ext_int);
+    takeMeasurement(measurements, sizeof(measurements), cap_delay, RST_ADC, t_ref, t_ref_final, t_in, V_TOGGLE, ADC_EXT_INT);
   }
   
 }
