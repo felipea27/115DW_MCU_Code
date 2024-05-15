@@ -4,8 +4,7 @@
 #include "adc.c"
 #include "globalDefs.h"
 
-
-
+//felipe
 const int cap_delay = 1; //1uS
 const int t_ref_final = 220; //220 uS
 int t_ref = 0;  //Vref timer
