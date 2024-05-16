@@ -7,8 +7,6 @@
 
 
 const int sampleSize = 100;
-bool take_measurement = 0;
-bool comp_out = 1;
 bool start_btn_flag = HIGH;
 int avg_meas_time;
 float avg_v_in;
@@ -35,7 +33,7 @@ void loop() {
     avg_v_in = computeVin(avg_meas_time, t_ref_final, v_ref);
   }
 
-  //start_btn_flag = HIGH;  manually set start_btn_flag to high to 
+  //start_btn_flag = HIGH;  manually set start_btn_flag to high 
   
 }
 

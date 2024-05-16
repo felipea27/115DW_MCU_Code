@@ -64,7 +64,6 @@ float takeVtpMeasurement(int sample_size, int cap_delay, int rstADC, int t_ref_f
   }
 
   //average the measurements array
-  
   return averageArray(measurements);
 }
 
