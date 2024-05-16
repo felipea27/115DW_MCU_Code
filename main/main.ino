@@ -3,7 +3,7 @@
 #include "adc.h"
 #include "adc.c"
 #include "globalDefs.h"
-//Andrew
+
 
 
 const int sampleSize = 100;
