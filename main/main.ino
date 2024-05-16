@@ -6,15 +6,12 @@
 //Andrew
 
 
-const int cap_delay = 1; //1uS
-const int t_ref_final = 220; //220 uS
-int t_ref = 0;  //Vref timer
-int t_in = 0;   //Vin timer
+const int sampleSize = 100;
 bool take_measurement = 0;
 bool comp_out = 1;
-int i = 0;
-int measurements [100];
 bool start_btn_flag = HIGH;
+int avg_meas_time;
+float avg_v_in;
 //bool adc_int_flag = 1;
 
 
@@ -34,8 +31,11 @@ void loop() {
   start_btn_flag = digitalRead(START_BTN_PIN);
   if(start_btn_flag == LOW)
   {
-    takeMeasurement(measurements, sizeof(measurements), cap_delay, RST_ADC, t_ref, t_ref_final, t_in, V_TOGGLE, ADC_EXT_INT);
+    avg_meas_time = takeVtpMeasurement(sampleSize, cap_delay, RST_ADC, t_ref_final, V_TOGGLE, ADC_EXT_INT);
+    avg_v_in = computeVin(avg_meas_time, t_ref_final, v_ref);
   }
+
+  //start_btn_flag = HIGH;  manually set start_btn_flag to high to 
   
 }
 
