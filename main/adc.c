@@ -67,3 +67,6 @@ float takeVtpMeasurement(int sample_size, int cap_delay, int rstADC, int t_ref_f
   return averageArray(measurements);
 }
 
+//Interrupt service routine of ADC_EXT_INT, pin32 -- INT0/PD2
+//If ADC_EXT_INT goes low, then set adc_ext_int_flag to low
+

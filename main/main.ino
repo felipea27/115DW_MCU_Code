@@ -5,7 +5,6 @@
 #include "globalDefs.h"
 
 
-
 const int sampleSize = 100;
 bool start_btn_flag = HIGH;
 int avg_meas_time;
@@ -22,6 +21,11 @@ void setup() {
   //Declare pins as outputs
   pinMode(RST_ADC, OUTPUT);
   pinMode(V_TOGGLE, OUTPUT);
+
+  //Enable interrupts:
+  //D7 bit of SREG (status register) enables all interrupts globally
+  //Set D7 of SREG HIGH
+  //Set relavent bit for interrupt pin in TIMSK register
 }
 
 void loop() {
