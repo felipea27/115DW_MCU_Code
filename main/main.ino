@@ -10,6 +10,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+//Create a display object
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 const int sampleSize = 100;
 bool start_btn_flag = HIGH;
@@ -41,7 +43,6 @@ void setup() {
 
   display.display();
   delay(2000); // Pause for 2 seconds
-
   // Clear the buffer
   display.clearDisplay();
   display.println("Connecting with display");
