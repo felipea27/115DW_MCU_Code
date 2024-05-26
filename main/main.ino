@@ -4,6 +4,12 @@
 #include "adc.c"
 #include "globalDefs.h"
 
+//Libraries for OLED communication:
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
 
 const int sampleSize = 100;
 bool start_btn_flag = HIGH;
@@ -26,6 +32,19 @@ void setup() {
   //D7 bit of SREG (status register) enables all interrupts globally
   //Set D7 of SREG HIGH
   //Set relavent bit for interrupt pin in TIMSK register
+
+  //Setup I2C connection with OLED
+  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;); // Don't proceed, loop forever
+  }
+
+  display.display();
+  delay(2000); // Pause for 2 seconds
+
+  // Clear the buffer
+  display.clearDisplay();
+  display.println("Connecting with display");
 }
 
 void loop() {
@@ -36,7 +55,9 @@ void loop() {
     avg_meas_time = takeVtpMeasurement(sampleSize, cap_delay, RST_ADC, t_ref_final, V_TOGGLE, ADC_EXT_INT);
     avg_v_in = computeVin(avg_meas_time, t_ref_final, v_ref);
   }
-
+  display.println("Average Vin: ");
+  display.println(avg_v_in);
+  display.clearDisplay();
   //start_btn_flag = HIGH;  manually set start_btn_flag to high 
   
 }
@@ -56,6 +77,7 @@ void loop() {
 //Toggle ADC input -- drive PC1 high for a CLK cycle. 
 
 //Configure PD2 to be an input (or interrupt) pin (experiment with timing on both)
+//Need to set PD2 to 0: DDRD |= 0000000;
 
 //Configure PB0 to be an input pin
 

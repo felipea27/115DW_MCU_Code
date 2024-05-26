@@ -57,7 +57,8 @@ float takeVtpMeasurement(int sample_size, int cap_delay, int rstADC, int t_ref_f
     {
       t_in++;
       delayMicroseconds(1);
-      adc_ext_int = digitalRead(adc_ext_int_pin); //Need to replace this logic with an interrupt or a faster digitalRead function
+      //adc_ext_int = digitalRead(adc_ext_int_pin); //Need to replace this logic with an interrupt or a faster digitalRead function
+      adc_ext_int = (PIND >> 2 & B00000100 >> 2);
     }
     measurements[i] = t_in;
     t_in = 0;
