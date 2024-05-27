@@ -56,8 +56,9 @@ float takeVtpMeasurement(int sample_size, int cap_delay, int rstADC, int t_ref_f
     while(adc_ext_int != 0)
     {
       t_in++;
-      delayMicroseconds(1);
+      delayMicroseconds(15);
       adc_ext_int = digitalRead(adc_ext_int_pin); //Need to replace this logic with an interrupt or a faster digitalRead function
+      //adc_ext_int = (PIND >> 2 & B00000100 >> 2);
     }
     measurements[i] = t_in;
     t_in = 0;
@@ -66,4 +67,7 @@ float takeVtpMeasurement(int sample_size, int cap_delay, int rstADC, int t_ref_f
   //average the measurements array
   return averageArray(measurements);
 }
+
+//Interrupt service routine of ADC_EXT_INT, pin32 -- INT0/PD2
+//If ADC_EXT_INT goes low, then set adc_ext_int_flag to low
 
