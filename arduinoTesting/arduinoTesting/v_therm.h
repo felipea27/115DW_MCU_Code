@@ -11,6 +11,6 @@
 //Set convert pin 26 -- PC3 to be an ADC input
 //void setupADC(int adc_pin_number);
 
-float measureVth();
+//float measureVth();
 
 #endif //V_THERM_INCLUDED

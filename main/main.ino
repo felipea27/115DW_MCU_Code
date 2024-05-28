@@ -48,7 +48,11 @@ void setup() {
   delay(2000); // Pause for 2 seconds
   // Clear the buffer
   display.clearDisplay();
+  display.setTextSize(1);                                  //Display the average BPM next to it
+  display.setTextColor(WHITE); 
+  display.setCursor(5, 15);
   display.println("Connecting with display");
+  display.display();
   delay(1000);
 }
 

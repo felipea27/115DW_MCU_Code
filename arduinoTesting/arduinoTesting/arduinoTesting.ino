@@ -6,13 +6,14 @@
 #include "v_therm.h"
 
 //Libraries for OLED communication:
-#include <SPI.h>
+//#include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
 //Create a display object
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
 
 const int sampleSize = 100;
 bool start_btn_flag = HIGH;
@@ -23,39 +24,58 @@ float vThermistor = 0;
 
 
 void setup() {
+  Serial.begin(9600);
+  Serial.println("Starting code execution");
+  delay(1000);
   // put your setup code here, to run once:
   //Declare pins as inputs
-  pinMode(START_BTN_PIN, INPUT);
+  pinMode(0, INPUT);
   pinMode(ADC_EXT_INT, INPUT);
-  pinMode(V_TH_PIN, INPUT);
+  //pinMode(V_TH_PIN, INPUT);
 
   //Declare pins as outputs
   pinMode(RST_ADC, OUTPUT);
   pinMode(V_TOGGLE, OUTPUT);
+
+  digitalWrite(RST_ADC, HIGH);
 
   //Enable interrupts:
   //D7 bit of SREG (status register) enables all interrupts globally
   //Set D7 of SREG HIGH
   //Set relavent bit for interrupt pin in TIMSK register
 
+  /*
   //Setup I2C connection with OLED
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
     for(;;); // Don't proceed, loop forever
   }
-
+  delay(1000);
+  Serial.println("Display connected");
+  delay(500);
   display.display();
   delay(2000); // Pause for 2 seconds
   // Clear the buffer
   display.clearDisplay();
-  display.println("Connecting with display");
-  delay(1000);
+  //display.drawBitmap(5, 5, pic1_bmp, 24, 21, WHITE);       //Draw the first bmp picture (little heart)
+  display.setTextSize(1);                                  //Display the average BPM next to it
+  display.setTextColor(WHITE); 
+  display.setCursor(5, 15);                         
+  display.println("Display connected");
+  //display.display();
+
+  display.setCursor(5, 30);
+  display.println("Degrees in C: ");
+  display.setCursor(5, 45);
+  display.println("Degrees in F: ");
+  display.display();
+  */
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
-  vThermistor = measureVth();
+  //vThermistor = measureVth();
 
   start_btn_flag = digitalRead(START_BTN_PIN);
   if(start_btn_flag == LOW)
@@ -63,9 +83,12 @@ void loop() {
     avg_meas_time = takeVtpMeasurement(sampleSize, cap_delay, RST_ADC, t_ref_final, V_TOGGLE, ADC_EXT_INT);
     avg_v_in = computeVin(avg_meas_time, t_ref_final, v_ref);
   }
-  display.println("Average Vin: ");
-  display.println(avg_v_in);
-  display.clearDisplay();
+
+
+  
+  //display.println("Average Vin: ");
+  //display.println(avg_v_in);
+  //display.clearDisplay();
   //start_btn_flag = HIGH;  manually set start_btn_flag to high 
   
 }
