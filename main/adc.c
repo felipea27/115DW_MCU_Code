@@ -45,7 +45,7 @@ float takeVtpMeasurement(int sample_size, int cap_delay, int rstADC, int t_ref_f
     while(t_ref < t_ref_final)
     {
       t_ref++;
-      delayMicroseconds(1);
+      delay(1);
     }
     t_ref = 0;
 
