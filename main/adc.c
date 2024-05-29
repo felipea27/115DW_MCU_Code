@@ -27,7 +27,7 @@ float takeVtpMeasurement(int sample_size, int cap_delay, int rstADC, int t_ref_f
 {
   bool adc_ext_int;
   int t_ref = 0;
-  int t_in = 0;
+  unsigned short t_in = 0;
   int measurements [sample_size];
   for(int i = 0; i < sample_size; i++)
   {  
