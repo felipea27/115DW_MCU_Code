@@ -29,10 +29,11 @@
 
 //Define I2C pins and change/overrride them in either Wire.h or somewhere in our code
 
-const int cap_delay = 1200; //1200 uS
-const int t_ref_final = 10; //10 mS
+const int rc_delay = 1200; //1200 uS
+const int t_ref_final = 12; //12 mS
 const float v_ref = 1.15;
 const float v_ref_int = 5.0;
+const float v_plus = 1.44;
 
 
 #endif
