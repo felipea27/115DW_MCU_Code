@@ -20,10 +20,12 @@ bool start_btn_flag = HIGH;
 int avg_meas_time;
 float avg_t_in;
 float avg_v_in;
-float vThermistor = 0;
+float avg_rth;
 volatile bool comparatorFlag = 1;
 bool *comparatorFlagPtr = &comparatorFlag;
-unsigned short measurements[sampleSize];
+unsigned short vtp_measurements[sampleSize];
+float vth_measurements[sampleSize];
+
 //bool adc_int_flag = 1;
 
 
@@ -42,6 +44,7 @@ void setup() {
   //D7 bit of SREG (status register) enables all interrupts globally
   //Set D7 of SREG HIGH
   //Set relavent bit for interrupt pin in TIMSK register
+  sei();
   attachInterrupt(ADC_EXT_INT, ISR_adcExtInt, FALLING);
 
   //Setup I2C connection with OLED
@@ -54,7 +57,7 @@ void setup() {
   delay(2000); // Pause for 2 seconds
   // Clear the buffer
   display.clearDisplay();
-  display.setTextSize(1);                                  //Display the average BPM next to it
+  display.setTextSize(1);                                  
   display.setTextColor(WHITE); 
   display.setCursor(5, 15);
   display.println("Connecting with display");
@@ -70,10 +73,10 @@ void loop() {
   start_btn_flag = digitalRead(START_BTN_PIN);
   if(start_btn_flag == LOW)
   {
-    takeVtpMeasurement(measurements, sampleSize, rc_delay, RST_ADC, t_ref_final, 
+    takeVtpMeasurement(vtp_measurements, sampleSize, rc_delay, RST_ADC, t_ref_final, 
                                 V_TOGGLE, ADC_EXT_INT, comparatorFlagPtr);
   }
-  avg_t_in = averageArray(measurements);
+  avg_t_in = averageArray(vtp_measurements);
   avg_v_in = computeVin(avg_t_in, t_ref_final, v_ref, v_plus);
   display.println("Average Vin: ");
   display.println(avg_v_in);

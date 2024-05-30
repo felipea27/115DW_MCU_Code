@@ -32,8 +32,9 @@
 const int rc_delay = 1200; //1200 uS
 const int t_ref_final = 12; //12 mS
 const float v_ref = 1.15;
-const float v_ref_int = 5.0;
+const float v_ref_int = 4.88;
 const float v_plus = 1.44;
+const float i_bg = (v_ref_int - v_ref) / 2000000;
 
 
 #endif
