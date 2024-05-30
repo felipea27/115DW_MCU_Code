@@ -34,7 +34,7 @@ const int t_ref_final = 12; //12 mS
 const float v_ref = 1.15;
 const float v_ref_int = 4.88;
 const float v_plus = 1.44;
-const float i_bg = (v_ref_int - v_ref) / 2000000;
+const float i_bg = 1.865e-6;
 
 
 #endif

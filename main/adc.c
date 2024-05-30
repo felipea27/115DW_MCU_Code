@@ -39,7 +39,7 @@ void takeVtpMeasurement(unsigned short* measurements, int sample_size, volatile 
     digitalWrite(RST_ADC, HIGH);
     delayMicroseconds(rc_delay);
     digitalWrite(V_TOGGLE, LOW);
-    delayMicroseconds(rc_dealy); 
+    delayMicroseconds(rc_delay); 
     digitalWrite(RST_ADC, LOW);
 
 

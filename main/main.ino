@@ -68,16 +68,15 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  vThermistor = measureVth();
+  //vThermistor = measureVth();
 
   start_btn_flag = digitalRead(START_BTN_PIN);
   if(start_btn_flag == LOW)
   {
-    takeVtpMeasurement(vtp_measurements, sampleSize, rc_delay, RST_ADC, t_ref_final, 
-                                V_TOGGLE, ADC_EXT_INT, comparatorFlagPtr);
+    takeVtpMeasurement(vtp_measurements, sampleSize, comparatorFlagPtr);
   }
   avg_t_in = averageArray(vtp_measurements);
-  avg_v_in = computeVin(avg_t_in, t_ref_final, v_ref, v_plus);
+  avg_v_in = computeVin(avg_t_in);
   display.println("Average Vin: ");
   display.println(avg_v_in);
   display.clearDisplay();
