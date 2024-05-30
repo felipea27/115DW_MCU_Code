@@ -5,9 +5,9 @@
 #include "globalDefs.h"
 //#include "AverageValue.h"
 
-float computeVin (float t_in, int t_ref, float v_ref, float v_pos_rail)
+float computeVin (float t_in)
 {
-  return t_ref * (v_pos_rail - v_ref) / t_in + v_pos_rail;
+  return t_ref_final / 1000 * (v_plus - v_ref) / t_in + v_plus;
 }
 
 float averageArray(unsigned short* arr)
