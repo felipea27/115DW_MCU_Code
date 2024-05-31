@@ -8,7 +8,7 @@
 float measureVth()
 {
   int v_th_adc = analogRead(V_TH_PIN);
-  float v_th = v_th_adc * v_ref_int / 1024;
+  float v_th = v_th_adc * v_ref_int / 1023;
   return v_th;
 }
 
@@ -34,5 +34,6 @@ float r_thermistor(float averageVth)
 
 float t_amb(float avgVth)
 {
+  
   //return some equation with r_thermistor(avgVth)
 }
