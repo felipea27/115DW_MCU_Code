@@ -1,6 +1,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <Arduino.h>
 #include "globalDefs.h"
 #include "testingFunctions.h"
 
@@ -21,14 +22,19 @@ bool *comparatorFlagPtr = &comparatorFlag;
 
 void setup() {
   // put your setup code here, to run once:
+  Serial.begin(9600);
+
   //Declare pins as inputs
-  pinMode(START_BTN_PIN, INPUT);
+  //pinMode(START_BTN_PIN, INPUT);
   pinMode(ADC_EXT_INT, INPUT);
   pinMode(V_TH_PIN, INPUT);
 
   //Declare pins as outputs
+  pinMode(TEST_DRIVE_PIN, OUTPUT);
   pinMode(RST_ADC, OUTPUT);
   pinMode(V_TOGGLE, OUTPUT);
+
+  digitalWrite(TEST_DRIVE_PIN, HIGH);
 
   //Enable interrupts:
   //D7 bit of SREG (status register) enables all interrupts globally
@@ -36,15 +42,14 @@ void setup() {
   //Set relavent bit for interrupt pin in TIMSK register
   sei();
   attachInterrupt(ADC_EXT_INT, ISR_adcExtInt, FALLING);
-
+  digitalWrite(TEST_DRIVE_PIN, LOW);
+  testInterrupt(comparatorFlagPtr);
+  Serial.println("test done");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
-  testInterrupt(comparatorFlagPtr);
-  System.println("test done");
-  while(1)
 }
 
 void ISR_adcExtInt()

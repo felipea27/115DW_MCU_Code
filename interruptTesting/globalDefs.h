@@ -5,7 +5,8 @@
 #define GLOBAL_DEFS_INCLUDED
 
 //Assign pin numbers variables
-#define START_BTN_PIN (12)
+//#define START_BTN_PIN (12)
+#define TEST_DRIVE_PIN (12)
 #define DEGREE_BTN_PIN (13)
 #define RST_PIN (29)
 #define ADC_EXT_INT (32)
