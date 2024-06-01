@@ -9,7 +9,7 @@
 #define TEST_DRIVE_PIN (12)
 #define DEGREE_BTN_PIN (13)
 #define RST_PIN (29)
-#define ADC_EXT_INT (32)
+#define ADC_EXT_INT (8)
 #define V_TH_PIN (26) //ADC3 of MCU
 
 #define RST_ADC (23)
@@ -36,6 +36,8 @@ const float v_ref = 1.15;
 const float v_ref_int = 4.88;
 const float v_plus = 1.44;
 const float i_bg = 1.865e-6;
+
+volatile bool compFlag = 1;
 
 
 #endif

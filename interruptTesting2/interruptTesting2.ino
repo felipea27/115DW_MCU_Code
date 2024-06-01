@@ -2,8 +2,9 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <Arduino.h>
-#include "globalDefs.h"
-#include "testingFunctions.h"
+#include "globalDefs2.h"
+#include "testingFunctions2.h"
+
 
 
 /*
@@ -12,8 +13,8 @@ float avg_t_in;
 float avg_v_in;
 float avg_rth;
 */
-volatile bool comparatorFlag = 1;
-bool *comparatorFlagPtr = &comparatorFlag;
+
+//bool *comparatorFlagPtr = &comparatorFlag;
 //unsigned short vtp_measurements[sampleSize];
 //float vth_measurements[sampleSize];
 
@@ -27,12 +28,12 @@ void setup() {
   //Declare pins as inputs
   //pinMode(START_BTN_PIN, INPUT);
   pinMode(ADC_EXT_INT, INPUT);
-  pinMode(V_TH_PIN, INPUT);
+  //pinMode(V_TH_PIN, INPUT);
 
   //Declare pins as outputs
   pinMode(TEST_DRIVE_PIN, OUTPUT);
-  pinMode(RST_ADC, OUTPUT);
-  pinMode(V_TOGGLE, OUTPUT);
+  //pinMode(RST_ADC, OUTPUT);
+  //pinMode(V_TOGGLE, OUTPUT);
 
   digitalWrite(TEST_DRIVE_PIN, HIGH);
 
@@ -43,8 +44,9 @@ void setup() {
   sei();
   attachInterrupt(ADC_EXT_INT, ISR_adcExtInt, FALLING);
   digitalWrite(TEST_DRIVE_PIN, LOW);
-  testInterrupt(comparatorFlagPtr);
-  Serial.println("test done");
+  testInterrupt();
+  Serial.print("Comparator flag: ");
+  Serial.println(compFlag);
 }
 
 void loop() {
@@ -54,7 +56,7 @@ void loop() {
 
 void ISR_adcExtInt()
 {
-  comparatorFlag = 0;
+  compFlag = 0;
 }
 
 //REGISTER AND PORT CONFIGURATIONS:

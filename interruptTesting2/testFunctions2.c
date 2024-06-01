@@ -2,15 +2,14 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <Arduino.h>
-#include "globalDefs.h"
+#include "globalDefs2.h"
 
 
-void testInterrupt(volatile bool* testBool)
+void testInterrupt()
 {
   //*testBool = 1;
-  while(*testBool != 0)
+  while(compFlag != 0)
   {
 
   }
 }
-

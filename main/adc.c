@@ -12,7 +12,7 @@ float computeVin (float t_in)
 
 float averageArray(unsigned short* arr)
 {
-  int sample_size = sizeof(arr);
+  int sample_size = sizeof(arr);  //May be errors with byte sizes and arr being a pointer to array
   int sum = 0;
   float avg_meas;
   for(int j = 0; j < sample_size; j++)
