@@ -23,7 +23,7 @@ float averageArray(unsigned short* arr)
   return avg_meas;
 }
 
-void takeVtpMeasurement(unsigned short* measurements, int sample_size, volatile bool* adc_ext_int)
+void takeVtpMeasurement(unsigned short* measurements, int sample_size)
 {
   unsigned short t_ref = 0;
   unsigned short t_in;
@@ -33,7 +33,7 @@ void takeVtpMeasurement(unsigned short* measurements, int sample_size, volatile 
   //unsigned short measurements [sample_size];
   for(int i = 0; i < sample_size; i++)
   {  
-    *adc_ext_int = 1;
+    compFlag = 1;
     
     //Discharge capacitor
     digitalWrite(RST_ADC, HIGH);
@@ -56,7 +56,7 @@ void takeVtpMeasurement(unsigned short* measurements, int sample_size, volatile 
 
     //count t_in
     startTimeTin = micros();
-    while(*adc_ext_int != 0)
+    while(compFlag == 1)
     {
       /*
       t_in++;

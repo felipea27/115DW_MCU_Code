@@ -36,5 +36,7 @@ const float v_ref_int = 4.88;
 const float v_plus = 1.44;
 const float i_bg = 1.865e-6;
 
+extern volatile bool compFlag;
+
 
 #endif

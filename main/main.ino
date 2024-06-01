@@ -21,8 +21,7 @@ int avg_meas_time;
 float avg_t_in;
 float avg_v_in;
 float avg_rth;
-volatile bool comparatorFlag = 1;
-bool *comparatorFlagPtr = &comparatorFlag;
+volatile bool compFlag = 1;
 unsigned short vtp_measurements[sampleSize];
 float vth_measurements[sampleSize];
 
@@ -87,7 +86,7 @@ void loop() {
 
 void ISR_adcExtInt()
 {
-  comparatorFlag = 0;
+  compFlag = 0;
 }
 
 //REGISTER AND PORT CONFIGURATIONS:

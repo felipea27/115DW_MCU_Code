@@ -3,55 +3,30 @@
 #include <util/delay.h>
 #include <Arduino.h>
 #include "globalDefs2.h"
-#include "testingFunctions2.h"
+#include "testFunctions2.h"
+#include "testFunctions2.c"
 
-
-
-/*
-int avg_meas_time;
-float avg_t_in;
-float avg_v_in;
-float avg_rth;
-*/
-
-//bool *comparatorFlagPtr = &comparatorFlag;
-//unsigned short vtp_measurements[sampleSize];
-//float vth_measurements[sampleSize];
-
-//bool adc_int_flag = 1;
-
+volatile bool compFlag = 1;
 
 void setup() {
-  // put your setup code here, to run once:
+  // put your setup code here, to run once
+  
+  //Declare pins as inputs
+  pinMode(ADC_EXT_INT, INPUT);
+  attachInterrupt(digitalPinToInterrupt(ADC_EXT_INT), ISR_adcExtInt, FALLING);
+
   Serial.begin(9600);
 
-  //Declare pins as inputs
-  //pinMode(START_BTN_PIN, INPUT);
-  pinMode(ADC_EXT_INT, INPUT);
-  //pinMode(V_TH_PIN, INPUT);
-
-  //Declare pins as outputs
-  pinMode(TEST_DRIVE_PIN, OUTPUT);
-  //pinMode(RST_ADC, OUTPUT);
-  //pinMode(V_TOGGLE, OUTPUT);
-
-  digitalWrite(TEST_DRIVE_PIN, HIGH);
-
-  //Enable interrupts:
-  //D7 bit of SREG (status register) enables all interrupts globally
-  //Set D7 of SREG HIGH
-  //Set relavent bit for interrupt pin in TIMSK register
-  sei();
-  attachInterrupt(ADC_EXT_INT, ISR_adcExtInt, FALLING);
-  digitalWrite(TEST_DRIVE_PIN, LOW);
-  testInterrupt();
-  Serial.print("Comparator flag: ");
+  Serial.println("comparator value before interrupt: ");
   Serial.println(compFlag);
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  testInterrupt();
 
+  Serial.print("Interrupt triggered, new compFlag: ");
+  Serial.println(compFlag);
 }
 
 void ISR_adcExtInt()
