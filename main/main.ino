@@ -31,44 +31,60 @@ float vth_measurements[sampleSize];
 void setup() {
   // put your setup code here, to run once:
   //Declare pins as inputs
-  pinMode(START_BTN_PIN, INPUT);
-  pinMode(ADC_EXT_INT, INPUT);
+  
+  //pinMode(ADC_EXT_INT, INPUT);
   pinMode(V_TH_PIN, INPUT);
 
   //Declare pins as outputs
-  pinMode(RST_ADC, OUTPUT);
-  pinMode(V_TOGGLE, OUTPUT);
+  pinMode(START_BTN_PIN, OUTPUT);
+  //pinMode(RST_ADC, OUTPUT);
+  //pinMode(V_TOGGLE, OUTPUT);
 
   //Enable interrupts:
   //D7 bit of SREG (status register) enables all interrupts globally
   //Set D7 of SREG HIGH
   //Set relavent bit for interrupt pin in TIMSK register
-  sei();
-  attachInterrupt(ADC_EXT_INT, ISR_adcExtInt, FALLING);
+  //sei();
+  //attachInterrupt(ADC_EXT_INT, ISR_adcExtInt, FALLING);
 
   //Setup I2C connection with OLED
+  /*
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
     for(;;); // Don't proceed, loop forever
+  }
+  */
+  while(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
+  {
+
   }
 
   display.display();
   delay(2000); // Pause for 2 seconds
   // Clear the buffer
   display.clearDisplay();
-  display.setTextSize(1);                                  
+  display.setTextSize(2);                                  
   display.setTextColor(WHITE); 
   display.setCursor(5, 15);
   display.println("Connecting with display");
   display.display();
   delay(1000);
+  
+
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+  display.clearDisplay();
+  display.setCursor(5, 15);
+  display.println(measureVth());
+  display.display();
+  digitalWrite(START_BTN_PIN, HIGH);
+  delay(3000);
+  digitalWrite(START_BTN_PIN, LOW);
+  delay(3000);
   //vThermistor = measureVth();
-
+  /*
   start_btn_flag = digitalRead(START_BTN_PIN);
   if(start_btn_flag == LOW)
   {
@@ -80,15 +96,15 @@ void loop() {
   display.println(avg_v_in);
   display.clearDisplay();
   //start_btn_flag = HIGH;  manually set start_btn_flag to high 
-  
+  */
 }
 
-
+/*
 void ISR_adcExtInt()
 {
   compFlag = 0;
 }
-
+*/
 //REGISTER AND PORT CONFIGURATIONS:
 //Configure PB6 for external clk input
 
