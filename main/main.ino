@@ -36,7 +36,7 @@ void setup() {
   pinMode(V_TH_PIN, INPUT);
 
   //Declare pins as outputs
-  pinMode(START_BTN_PIN, OUTPUT);
+  //pinMode(START_BTN_PIN, OUTPUT);
   //pinMode(RST_ADC, OUTPUT);
   //pinMode(V_TOGGLE, OUTPUT);
 
@@ -79,9 +79,6 @@ void loop() {
   display.setCursor(5, 15);
   display.println(measureVth());
   display.display();
-  digitalWrite(START_BTN_PIN, HIGH);
-  delay(3000);
-  digitalWrite(START_BTN_PIN, LOW);
   delay(3000);
   //vThermistor = measureVth();
   /*
