@@ -1,4 +1,5 @@
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <util/delay.h>
 #include "adc.h"
 #include "adc.c"
@@ -6,7 +7,7 @@
 #include "v_therm.h"
 
 //Libraries for OLED communication:
-//#include <SPI.h>
+#include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -14,85 +15,93 @@
 //Create a display object
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-
 const int sampleSize = 100;
 bool start_btn_flag = HIGH;
 int avg_meas_time;
+float avg_t_in;
 float avg_v_in;
-float vThermistor = 0;
+float avg_rth;
+volatile bool compFlag = 1;
+unsigned short vtp_measurements[sampleSize];
+float vth_measurements[sampleSize];
+
 //bool adc_int_flag = 1;
 
 
 void setup() {
-  Serial.begin(9600);
-  Serial.println("Starting code execution");
-  delay(1000);
   // put your setup code here, to run once:
   //Declare pins as inputs
-  pinMode(0, INPUT);
-  pinMode(ADC_EXT_INT, INPUT);
-  //pinMode(V_TH_PIN, INPUT);
+  //pinMode(START_BTN_PIN, INPUT);
+  //pinMode(ADC_EXT_INT, INPUT);
+  pinMode(V_TH_PIN, INPUT);
+  pinMode(V_TP_PIN, INPUT);
 
   //Declare pins as outputs
+  /*
   pinMode(RST_ADC, OUTPUT);
   pinMode(V_TOGGLE, OUTPUT);
-
-  digitalWrite(RST_ADC, HIGH);
-
+  */
   //Enable interrupts:
   //D7 bit of SREG (status register) enables all interrupts globally
   //Set D7 of SREG HIGH
   //Set relavent bit for interrupt pin in TIMSK register
+  //sei();
+  //attachInterrupt(ADC_EXT_INT, ISR_adcExtInt, FALLING);
 
-  /*
   //Setup I2C connection with OLED
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
     for(;;); // Don't proceed, loop forever
   }
-  delay(1000);
-  Serial.println("Display connected");
-  delay(500);
+
   display.display();
   delay(2000); // Pause for 2 seconds
   // Clear the buffer
   display.clearDisplay();
-  //display.drawBitmap(5, 5, pic1_bmp, 24, 21, WHITE);       //Draw the first bmp picture (little heart)
-  display.setTextSize(1);                                  //Display the average BPM next to it
+  display.setTextSize(1);                                  
   display.setTextColor(WHITE); 
-  display.setCursor(5, 15);                         
-  display.println("Display connected");
-  //display.display();
-
-  display.setCursor(5, 30);
-  display.println("Degrees in C: ");
-  display.setCursor(5, 45);
-  display.println("Degrees in F: ");
+  display.setCursor(5, 15);
+  display.println("Connecting with display");
   display.display();
-  */
+  delay(2000);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  display.clearDisplay();
+  display.setCursor(5, 15);
+  display.print("Vth: ");
+  display.println(measureVth());
+  display.print("Vtp: ");
+  display.println(measureVtp());
+  display.display();
+  delay(3000);
+
 
   //vThermistor = measureVth();
 
+  /*
   start_btn_flag = digitalRead(START_BTN_PIN);
   if(start_btn_flag == LOW)
   {
-    avg_meas_time = takeVtpMeasurement(sampleSize, cap_delay, RST_ADC, t_ref_final, V_TOGGLE, ADC_EXT_INT);
-    avg_v_in = computeVin(avg_meas_time, t_ref_final, v_ref);
+    takeVtpMeasurement(vtp_measurements, sampleSize, comparatorFlagPtr);
   }
-
-
   
-  //display.println("Average Vin: ");
-  //display.println(avg_v_in);
-  //display.clearDisplay();
+  avg_t_in = averageArray(vtp_measurements);
+  avg_v_in = computeVin(avg_t_in);
+  display.println("Average Vin: ");
+  display.println(avg_v_in);
+  display.clearDisplay();
   //start_btn_flag = HIGH;  manually set start_btn_flag to high 
-  
+  */
 }
 
+/*
+void ISR_adcExtInt()
+{
+  compFlag = 0;
+}
+*/
 
 //REGISTER AND PORT CONFIGURATIONS:
 //Configure PB6 for external clk input
@@ -119,5 +128,38 @@ void loop() {
 //Read PD2 pin
 
 //Read PB0 pin
+/*
+void setupTC0()
+{
+  //set TC0 register to correct timer prescale
+  //In the TCCR0B register
+  //CS0 = //desired prescalar, bottom 3 bits of TCCR0B register.
+
+  001 -> no prescalar
+  010 -> clk_io / 8
+  011 -> clk_io / 64
+  100 -> clk_io / 256
+  101 0> clk_io / 1024
 
 
+//Set the value of the OCR0A to the overflow value of TC0
+
+  //Enable interrupt that corresponds to OCF0A flag. 
+    // Set the OCIE0A [1] bit to 1 in the TIMSK0 register to high.
+    // Also need to set the I bit in the status I register to 1
+  TIMSK0 |= 0x02; //Set the second bit to high
+  sei();
+  
+
+  //OCF0A flag goes up when TCNT0 goes to 0x00, so OCF0A becomes high when timer is at Tclk * (OCR0A + 1)
+  //TOV0 goes up when TC0 overflows, gets cleared with the timer interrupt
+}
+
+void enableTC0()
+{
+  //Minimizing Power consumption register (PRR0), PRTIM0 bit = 0
+  //TCNT0 = timer T0 value, this is an 8 bit register
+
+  //OCR0A = timer max number <-- sets the maximum value of the timer. Default is MAX = 255
+}
+*/

@@ -7,12 +7,13 @@
 //Assign pin numbers variables
 #define START_BTN_PIN (12)
 #define DEGREE_BTN_PIN (13)
-#define RST_PIN (8)
-#define ADC_EXT_INT (12)
-//#define V_TH_PIN (26) //ADC3 of MCU
+#define RST_PIN (29)
+#define ADC_EXT_INT (32)
+#define V_TH_PIN (A0) 
+#define V_TP_PIN (A1)
 
-#define RST_ADC (9)
-#define V_TOGGLE (10)
+#define RST_ADC (23)
+#define V_TOGGLE (24)
 
 //Defining OLED constants:
 
@@ -29,10 +30,14 @@
 
 //Define I2C pins and change/overrride them in either Wire.h or somewhere in our code
 
-const int cap_delay = 1200; //1200 uS
-const int t_ref_final = 10; //10 mS
+const int rc_delay = 1200; //1200 uS
+const int t_ref_final = 12; //12 mS
 const float v_ref = 1.15;
-const float v_ref_int = 5.0;
+const float v_ref_int = 4.88;
+const float v_plus = 1.44;
+const float i_bg = 1.865e-6;
+
+extern volatile bool compFlag;
 
 
 #endif
