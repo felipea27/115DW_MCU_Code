@@ -22,6 +22,7 @@ float avg_t_in;
 float avg_v_in;
 float avg_rth;
 volatile bool compFlag = 1;
+volatile bool vth = 0;
 unsigned short vtp_measurements[sampleSize];
 float vth_measurements[sampleSize];
 
@@ -33,7 +34,8 @@ void setup() {
   //Declare pins as inputs
   
   //pinMode(ADC_EXT_INT, INPUT);
-  pinMode(V_TH_PIN, INPUT);
+  sei();
+  //pinMode(V_TH_PIN, INPUT);
 
   //Declare pins as outputs
   //pinMode(START_BTN_PIN, OUTPUT);
@@ -54,6 +56,7 @@ void setup() {
     for(;;); // Don't proceed, loop forever
   }
   */
+  /*
   while(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
   {
 
@@ -69,17 +72,22 @@ void setup() {
   display.println("Connecting with display");
   display.display();
   delay(1000);
-  
+  */
+
+  setupADC();
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  
   display.clearDisplay();
   display.setCursor(5, 15);
-  display.println(measureVth());
+  display.println(vth);
   display.display();
-  delay(3000);
+  delay(1000);
+
+
   //vThermistor = measureVth();
   /*
   start_btn_flag = digitalRead(START_BTN_PIN);
@@ -94,6 +102,29 @@ void loop() {
   display.clearDisplay();
   //start_btn_flag = HIGH;  manually set start_btn_flag to high 
   */
+}
+
+void setupADC()
+{
+  //We need to set MUX0 and MUX1 true
+  ADMUX = (1 << REFS0) | (1 << MUX0) | (1 << MUX1);
+  //We need to turn on ADC
+  ADCSRA = (1 << ADEN) | (1 << ADIE) | (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
+
+  DIDR0 = (1 < ADC3D);
+
+  startADCConversion();
+}
+
+void startADCConversion()
+{
+  ADCSRA = (1 << ADSC);
+}
+
+ISR(ADC_vect)
+{
+  vth = ADC;
+  startADCConversion();
 }
 
 /*

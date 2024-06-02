@@ -12,6 +12,8 @@
 //Set convert pin 26 -- PC3 to be an ADC input
 //void setupADC(int adc_pin_number);
 
+int analogReadOvrd(int pin);
+
 float measureVth();
 float avgVth(float* arrVth);
 float r_thermistor(float averageVth);

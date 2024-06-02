@@ -37,3 +37,11 @@ float t_amb(float avgVth)
   
   //return some equation with r_thermistor(avgVth)
 }
+
+
+
+
+int analogReadOvrd(int pin)
+{
+
+}
