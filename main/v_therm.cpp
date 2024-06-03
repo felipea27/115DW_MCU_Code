@@ -9,7 +9,7 @@ float measureVth()
 {
   int v_th_adc = analogRead(V_TH_PIN);
   float v_th = v_th_adc * (v_ref_int / 1023);
-  return v_th_adc;
+  return v_th;
 }
 
 float avgVth(float* arrVth)

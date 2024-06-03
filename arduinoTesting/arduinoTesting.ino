@@ -18,6 +18,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 const int sampleSize = 100;
 bool start_btn_flag = HIGH;
 int avg_meas_time;
+int vth = 0;
 float avg_t_in;
 float avg_v_in;
 float avg_rth;
@@ -33,8 +34,8 @@ void setup() {
   //Declare pins as inputs
   //pinMode(START_BTN_PIN, INPUT);
   //pinMode(ADC_EXT_INT, INPUT);
-  pinMode(V_TH_PIN, INPUT);
-  pinMode(V_TP_PIN, INPUT);
+  //pinMode(V_TH_PIN, INPUT);
+  //pinMode(V_TP_PIN, INPUT);
 
   //Declare pins as outputs
   /*
@@ -44,14 +45,17 @@ void setup() {
   //Enable interrupts:
   //D7 bit of SREG (status register) enables all interrupts globally
   //Set D7 of SREG HIGH
+  Serial.begin(9600);
   //Set relavent bit for interrupt pin in TIMSK register
-  //sei();
+  sei();
   //attachInterrupt(ADC_EXT_INT, ISR_adcExtInt, FALLING);
+  Serial.println("ADC Register Level test");
 
+  /*
   //Setup I2C connection with OLED
-  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
+  while(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
+  {
+
   }
 
   display.display();
@@ -64,10 +68,20 @@ void setup() {
   display.println("Connecting with display");
   display.display();
   delay(2000);
+  */
+  setupADC();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  /*
+  display.clearDisplay();
+  display.setCursor(5, 15);
+  display.println(vth);
+  display.display();
+  delay(1000);
+  */
+  /*
   display.clearDisplay();
   display.setCursor(5, 15);
   display.print("Vth: ");
@@ -76,7 +90,7 @@ void loop() {
   display.println(measureVtp());
   display.display();
   delay(3000);
-
+  */
 
   //vThermistor = measureVth();
 
@@ -94,7 +108,33 @@ void loop() {
   display.clearDisplay();
   //start_btn_flag = HIGH;  manually set start_btn_flag to high 
   */
+  Serial.println(vth);
+  delay(1000);
 }
+
+void setupADC()
+{
+  //We need to set MUX0 and MUX1 true
+  ADMUX = (1 << REFS0) | (1 << MUX0) | (1 << MUX1);
+  //We need to turn on ADC
+  ADCSRA = (1 << ADEN) | (1 << ADIE) | (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
+
+  DIDR0 = (1 < ADC3D);
+
+  startADCConversion();
+}
+
+void startADCConversion()
+{
+  ADCSRA = (1 << ADSC);
+}
+
+ISR(ADC_vect)
+{
+  vth = ADC;
+  startADCConversion();
+}
+
 
 /*
 void ISR_adcExtInt()

@@ -7,7 +7,7 @@
 
 float computeVin (float t_in)
 {
-  return t_ref_final / 1000 * (v_plus - v_ref) / t_in + v_plus;
+  return -(t_in) / ((float)t_ref_final / 1000000) * (v_ref - v_plus)  + v_plus;
 }
 
 float averageArray(unsigned short* arr)
@@ -38,21 +38,21 @@ void takeVtpMeasurement(unsigned short* measurements, int sample_size)
     //Discharge capacitor
     digitalWrite(RST_ADC, HIGH);
     delayMicroseconds(rc_delay);
-    digitalWrite(V_TOGGLE, LOW);
+    digitalWrite(V_TOGGLE, HIGH);
     delayMicroseconds(rc_delay); 
     digitalWrite(RST_ADC, LOW);
 
 
     //Start t_ref counter
-    startTimeTref = millis();
+    startTimeTref = micros();
     while(t_ref < t_ref_final)
     { 
-      t_ref = millis() - startTimeTref;
+      t_ref = micros() - startTimeTref;
     }
     t_ref = 0;
 
     //Select Vin to be input to integrator:
-    digitalWrite(V_TOGGLE, HIGH);
+    digitalWrite(V_TOGGLE, LOW);
 
     //count t_in
     startTimeTin = micros();

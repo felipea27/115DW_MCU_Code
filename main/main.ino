@@ -15,7 +15,7 @@
 //Create a display object
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-const int sampleSize = 100;
+const int sampleSize = 1;
 bool start_btn_flag = HIGH;
 int avg_meas_time;
 float avg_t_in;
@@ -33,21 +33,22 @@ void setup() {
   // put your setup code here, to run once:
   //Declare pins as inputs
   
-  //pinMode(ADC_EXT_INT, INPUT);
-  sei();
+  pinMode(ADC_EXT_INT, INPUT);
   //pinMode(V_TH_PIN, INPUT);
 
+  
   //Declare pins as outputs
   //pinMode(START_BTN_PIN, OUTPUT);
-  //pinMode(RST_ADC, OUTPUT);
-  //pinMode(V_TOGGLE, OUTPUT);
-
+  
+  pinMode(RST_ADC, OUTPUT);
+  pinMode(V_TOGGLE, OUTPUT);
+  
   //Enable interrupts:
   //D7 bit of SREG (status register) enables all interrupts globally
   //Set D7 of SREG HIGH
   //Set relavent bit for interrupt pin in TIMSK register
-  //sei();
-  //attachInterrupt(ADC_EXT_INT, ISR_adcExtInt, FALLING);
+  sei();
+  attachInterrupt(ADC_EXT_INT, ISR_adcExtInt, FALLING);
 
   //Setup I2C connection with OLED
   /*
@@ -56,7 +57,7 @@ void setup() {
     for(;;); // Don't proceed, loop forever
   }
   */
-  /*
+  
   while(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
   {
 
@@ -66,26 +67,34 @@ void setup() {
   delay(2000); // Pause for 2 seconds
   // Clear the buffer
   display.clearDisplay();
-  display.setTextSize(2);                                  
+  display.setTextSize(1);                                  
   display.setTextColor(WHITE); 
   display.setCursor(5, 15);
   display.println("Connecting with display");
   display.display();
-  delay(1000);
-  */
-
-  setupADC();
+  delay(5000);
+  //Check if interrupts are enabled correctly
+  takeVtpMeasurement(vtp_measurements, sampleSize);
+  display.clearDisplay();
+  display.setCursor(5, 15);
+  display.println(vtp_measurements[0]);
+  display.setCursor(30, 15);
+  display.println(computeVin(vtp_measurements[0]));
+  display.display();
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   
-  display.clearDisplay();
-  display.setCursor(5, 15);
-  display.println(vth);
-  display.display();
-  delay(1000);
+  //delay(1000);
+  //digitalWrite(V_TOGGLE, LOW);
+  //digitalWrite(RST_ADC, LOW);
+  //display.clearDisplay();
+  //display.display();
+  //delay(1000);
+  //digitalWrite(V_TOGGLE, HIGH);
+  //digitalWrite(RST_ADC, HIGH);
 
 
   //vThermistor = measureVth();
@@ -104,6 +113,15 @@ void loop() {
   */
 }
 
+void ISR_adcExtInt()
+{
+  compFlag = 0;
+}
+
+
+
+
+/*
 void setupADC()
 {
   //We need to set MUX0 and MUX1 true
@@ -126,13 +144,10 @@ ISR(ADC_vect)
   vth = ADC;
   startADCConversion();
 }
-
-/*
-void ISR_adcExtInt()
-{
-  compFlag = 0;
-}
 */
+
+
+
 //REGISTER AND PORT CONFIGURATIONS:
 //Configure PB6 for external clk input
 
